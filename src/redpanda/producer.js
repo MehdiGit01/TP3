@@ -5,7 +5,9 @@ const isLocalBroker = getLocalBroker()
 const redpanda = new Kafka({
     brokers: [
         isLocalBroker ? `${process.env.HOST_IP}:9092` : 'redpanda-0:9092',
-        'localhost:19092'],
+        '192.168.149.128:19092',
+    //    'localhost:19092'
+    ],
 });
 const producer = redpanda.producer();
 export const getConnection = async (topic, user, message) => {
