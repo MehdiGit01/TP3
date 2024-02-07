@@ -1,15 +1,17 @@
 import * as Admin from "./redpanda/admin.js"
 import * as Producer from "./redpanda/producer.js"
 
-import {getUser} from "./messages/userlist.js";
-import {getStringMessage} from "./messages/stringmessages.js";
-import {getNumberMessage} from "./messages/numbermessage.js";
-import {getConfigNumber, getDebug, getTimeOut, getTopic, getTypeMessage} from "./config/config.js";
+import { getUser } from "./messages/userlist.js";
+import { getStringMessage } from "./messages/stringmessages.js";
+import { getNumberMessage } from "./messages/numbermessage.js";
+import { getConfigNumber, getDebug, getTimeOut, getTopic, getTypeMessage } from "./config/config.js";
+import { getStringConfig } from "./config/config.js"; // Ajout de cette importation
 
 const configNumber = getConfigNumber()
 const typeMessage = getTypeMessage()
 const topic = getTopic()
 const debug = getDebug()
+const stringConfig = getStringConfig(); // Ajout de cette ligne
 
 async function start() {
 
@@ -21,14 +23,14 @@ async function start() {
     setInterval(() => {
         const user = getUser()
         const message = typeMessage === "texte" ?
-            getStringMessage(3) :
+            getStringMessage(stringConfig) : // Utilisation de la variable stringConfig
             typeMessage === "nombre" ?
                 getNumberMessage(configNumber) :
                 "Config Error : choisir 'nombre' ou 'texte'"
 
         Producer.getConnection(topic, user, message)
         if (debug) {
-            console.log({topic, user, message})
+            console.log({ topic, user, message })
         }
 
     }, timeRetour)
